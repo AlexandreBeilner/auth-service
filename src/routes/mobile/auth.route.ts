@@ -1,0 +1,11 @@
+import {AbstractRoute} from "../common/abstract.route";
+import AuthController from "../../controllers/auth/mobile/auth.controller";
+
+export class AuthRoute extends AbstractRoute {
+    init() {
+        this.router.post('/login', AuthController.login);
+        this.router.post('/refresh-token', AuthController.refreshToken);
+        this.router.get('/me', AuthController.me);
+        return this.router;
+    }
+}
