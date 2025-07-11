@@ -1,5 +1,5 @@
-import {AbstractRoute} from "../common/abstract.route";
-import AuthController from "../../controllers/auth/web/auth.controller";
+import { AbstractRoute } from '../common/abstract.route';
+import AuthController from '../../controllers/auth/web/auth.controller';
 
 export class AuthRoute extends AbstractRoute {
     init() {

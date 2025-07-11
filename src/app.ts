@@ -1,15 +1,16 @@
 import express, { Express } from 'express';
-import {config} from "./config/config";
-import {database} from "./config/database";
-import {ROUTES} from "./routes";
+import { config } from './config/config';
+import { database } from './config/database';
+import { ROUTES } from './routes';
 
 export class App {
     private app: Express;
 
     constructor() {
         this.app = express();
-        database.connect()
-        this.routes()
+        this.app.use(express.json());
+        database.connect();
+        this.routes();
     }
 
     public listen(port: number) {
@@ -21,7 +22,7 @@ export class App {
 
     private routes(): void {
         ROUTES.forEach((r) => {
-            if (r.middleware){
+            if (r.middleware) {
                 this.app.use(r.endpoint, r.middleware, r.router);
                 return;
             }

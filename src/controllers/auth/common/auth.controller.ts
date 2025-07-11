@@ -1,8 +1,9 @@
-import {Request, Response} from "express";
+import { Request, Response } from 'express';
 
 class AuthController {
-    createAccount(req: Request, res: Response) {
-
+    register(req: Request, res: Response) {
+        console.log(req)
+        res.status(201).send()
     }
 }
 

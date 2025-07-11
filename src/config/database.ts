@@ -1,9 +1,9 @@
 import { Sequelize } from '@sequelize/core';
 import { PostgresDialect } from '@sequelize/postgres';
-import {User} from "../models/User";
-import {OAuthAccount} from "../models/OAuthAccount";
-import {RefreshToken} from "../models/RefreshToken";
-import {config} from "./config";
+import { User } from '../models/User';
+import { OAuthAccount } from '../models/OAuthAccount';
+import { RefreshToken } from '../models/RefreshToken';
+import { config } from './config';
 
 const db = new Sequelize({
     dialect: PostgresDialect,
@@ -16,18 +16,19 @@ const db = new Sequelize({
     clientMinMessages: 'notice',
     models: [User, OAuthAccount, RefreshToken],
     define: {
-        underscored: true
-    }
+        underscored: true,
+    },
 });
 
 const connect = async () => {
     await db.authenticate();
 
     await db.sync({
-        force: true
-    })
-}
+        force: true,
+    });
+};
 
 export const database = {
-    db, connect
-}
+    db,
+    connect,
+};

@@ -3,12 +3,21 @@ import {
     Model,
     InferAttributes,
     InferCreationAttributes,
-    CreationOptional, NonAttribute,
+    CreationOptional,
+    NonAttribute,
 } from '@sequelize/core';
-import {Attribute, PrimaryKey, NotNull, Default, Unique, HasMany, HasOne} from '@sequelize/core/decorators-legacy';
+import {
+    Attribute,
+    PrimaryKey,
+    NotNull,
+    Default,
+    Unique,
+    HasMany,
+    HasOne,
+} from '@sequelize/core/decorators-legacy';
 import { v4 as uuidv4 } from 'uuid';
-import {OAuthAccount} from "./OAuthAccount";
-import {RefreshToken} from "./RefreshToken";
+import { OAuthAccount } from './OAuthAccount';
+import { RefreshToken } from './RefreshToken';
 
 export class User extends Model<InferAttributes<User>, InferCreationAttributes<User>> {
     @Attribute(DataTypes.UUID)
@@ -20,6 +29,10 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     @NotNull
     @Unique
     declare email: string;
+
+    @Attribute(DataTypes.STRING)
+    @NotNull
+    declare name: string;
 
     @NotNull
     @Attribute(DataTypes.STRING)

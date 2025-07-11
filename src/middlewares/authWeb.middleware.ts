@@ -1,5 +1,3 @@
-class AuthWebMiddleware {
-
-}
+class AuthWebMiddleware {}
 
 export default new AuthWebMiddleware();

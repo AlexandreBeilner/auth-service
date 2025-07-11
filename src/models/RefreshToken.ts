@@ -5,10 +5,13 @@ import {
     InferCreationAttributes,
     CreationOptional,
 } from '@sequelize/core';
-import {Attribute, PrimaryKey, Default} from '@sequelize/core/decorators-legacy';
+import { Attribute, PrimaryKey, Default } from '@sequelize/core/decorators-legacy';
 import { v4 as uuidv4 } from 'uuid';
 
-export class RefreshToken extends Model<InferAttributes<RefreshToken>, InferCreationAttributes<RefreshToken>> {
+export class RefreshToken extends Model<
+    InferAttributes<RefreshToken>,
+    InferCreationAttributes<RefreshToken>
+> {
     @Attribute(DataTypes.UUID)
     @PrimaryKey
     @Default(() => uuidv4())

@@ -6,12 +6,12 @@ interface Config {
     port: number;
     nodeEnv: string;
     database: {
-        db: string,
-        user: string,
-        password: string,
-        host: string,
-        port: string,
-    }
+        db: string;
+        user: string;
+        password: string;
+        host: string;
+        port: string;
+    };
 }
 
 const config: Config = {
@@ -23,7 +23,7 @@ const config: Config = {
         password: process.env.DB_PASSWORD as string,
         host: process.env.DB_HOST as string,
         port: process.env.DB_PORT as string,
-    }
+    },
 };
 
-export {config};
+export { config };

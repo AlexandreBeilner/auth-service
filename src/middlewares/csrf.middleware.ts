@@ -1,5 +1,3 @@
-class CsrfMiddleware {
-
-}
+class CsrfMiddleware {}
 
 export default new CsrfMiddleware();
