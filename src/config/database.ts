@@ -24,7 +24,7 @@ const connect = async () => {
     await db.authenticate();
 
     await db.sync({
-        force: true,
+        alter: true,
     });
 };
 

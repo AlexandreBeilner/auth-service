@@ -6,7 +6,6 @@ type validateType = (req: Request, res: Response, next: NextFunction) => void;
 export class DataValidatorMiddleware {
     static validateBody = (schema: ZodSchema, overwrite: boolean = true): validateType => {
         return (req: Request, res: Response, next: NextFunction) => {
-            console.log(req.body)
             try {
                 const parse = schema.parse(req.body);
                 if (overwrite) {

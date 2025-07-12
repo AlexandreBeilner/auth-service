@@ -40,14 +40,14 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
 
     @Default(false)
     @Attribute(DataTypes.BOOLEAN)
-    declare isEmailVerified: boolean;
+    declare isEmailVerified?: boolean;
 
     @Default(false)
     @Attribute(DataTypes.BOOLEAN)
-    declare is2FAEnabled: boolean;
+    declare is2FAEnabled?: boolean;
 
     @Attribute(DataTypes.STRING)
-    declare twoFASecret: string;
+    declare twoFASecret?: string;
 
     @HasMany(() => OAuthAccount, 'userId')
     declare users?: NonAttribute<OAuthAccount[]>;

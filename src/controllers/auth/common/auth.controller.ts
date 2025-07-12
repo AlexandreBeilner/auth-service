@@ -1,9 +1,23 @@
 import { Request, Response } from 'express';
+import {AuthService} from "../../../services/auth.service";
+import {ErrorHandler} from "../../../utils/errorHandler";
+import {AuthRepository} from "../../../repositories/auth.repository";
 
 class AuthController {
-    register(req: Request, res: Response) {
-        console.log(req)
-        res.status(201).send()
+    private readonly authService: AuthService;
+    constructor() {
+        this.authService = new AuthService(
+            new AuthRepository()
+        );
+    }
+
+    register = async (req: Request, res: Response)=> {
+        try {
+            const user = await this.authService.register(req.body)
+            res.status(201).send({id: user.id})
+        } catch (error: any) {
+            ErrorHandler.throw(error, res);
+        }
     }
 }
 
