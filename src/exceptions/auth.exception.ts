@@ -9,7 +9,11 @@ export class AuthException extends AbstractException {
         INVALID_CREDENTIAL_ARGUMENTS: {
             message: 'E-mail ou senha estão incorretos. Verifique e tente novamente.',
             statusCode: 401,
-        }
+        },
+        INVALID_REFRESH_TOKEN: {
+            message: 'A sessão expirou ou o token de atualização é inválido. Faça login novamente.',
+            statusCode: 401,
+        },
     };
     constructor(errorCode: keyof typeof AuthException.exceptions) {
         const { message, statusCode } = AuthException.exceptions[errorCode];

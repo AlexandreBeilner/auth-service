@@ -1,13 +1,22 @@
 import express, { Express } from 'express';
+import cookieParser from 'cookie-parser';
 import { config } from './config/config';
 import { database } from './config/database';
 import { ROUTES } from './routes';
+import cors from 'cors';
 
 export class App {
     private app: Express;
 
     constructor() {
         this.app = express();
+        this.app.use(
+            cors({
+                origin: '*',
+                credentials: true,
+            })
+        );
+        this.app.use(cookieParser());
         this.app.use(express.json());
         database.connect();
         this.routes();

@@ -1,18 +1,22 @@
 import { UsersRepository } from '../repositories/users.repository';
 import { AuthException } from '../exceptions/auth.exception';
 import { Hash } from '../utils/hash';
-import {loginData, registerData} from '../types/auth.type';
-import {redis} from "../config/redis";
-import {Jwt} from "../utils/jwt";
-import {RefreshTokensRepository} from "../repositories/refreshTokens.repository";
+import { loginData, registerData } from '../types/auth.type';
+import { redis } from '../config/redis';
+import { Jwt } from '../utils/jwt';
+import { RefreshTokensRepository } from '../repositories/refreshTokens.repository';
 import dayjs from 'dayjs';
+import { RefreshToken } from '../models/RefreshToken';
 
 const BLOCK_TIME = 15 * 60; //15 minutes
 
 export class AuthService {
     private usersRepository: UsersRepository;
     private refreshTokensRepository: RefreshTokensRepository;
-    constructor(usersRepository: UsersRepository, refreshTokensRepository: RefreshTokensRepository) {
+    constructor(
+        usersRepository: UsersRepository,
+        refreshTokensRepository: RefreshTokensRepository
+    ) {
         this.usersRepository = usersRepository;
         this.refreshTokensRepository = refreshTokensRepository;
     }
@@ -30,35 +34,73 @@ export class AuthService {
         });
     }
 
-    public async login(data: loginData) {
+    public async login(data: loginData, rateLimitKey?: string) {
+        console.log(data);
         const user = await this.usersRepository.getByEmail(data.email);
-        const passwordIsEquals = Hash.compare(data.password, user?.passwordHash ?? '');
+        const passwordIsEquals = await Hash.compare(data.password, user?.passwordHash ?? '');
         if (!user || !passwordIsEquals) {
-            if (data.key) {
-                await redis.incr(data.key);
-                await redis.expire(data.key, BLOCK_TIME);
+            if (rateLimitKey) {
+                await redis.incr(rateLimitKey);
+                await redis.expire(rateLimitKey, BLOCK_TIME);
             }
             throw new AuthException('INVALID_CREDENTIAL_ARGUMENTS');
         }
 
-        if (data.key) {
-            await redis.del(data.key);
+        if (rateLimitKey) {
+            await redis.del(rateLimitKey);
         }
 
-
+        const accessToken = this.generateAccessToken(user.id);
+        const refreshToken = await this.generateRefreshToken(user.id);
+        return {
+            accessToken,
+            refreshToken,
+        };
     }
 
     public async refreshToken(token: string) {
+        const refreshToken = await this.refreshTokensRepository.getByToken(token);
 
+        if (!refreshToken || refreshToken.revokedAt) {
+            throw new AuthException('INVALID_REFRESH_TOKEN');
+        }
+
+        try {
+            Jwt.verifyRefreshToken(token);
+        } catch (err) {
+            await this.revokeToken(refreshToken);
+            throw new AuthException('INVALID_REFRESH_TOKEN');
+        }
+
+        if (refreshToken.expiresAt < new Date()) {
+            await this.revokeToken(refreshToken);
+            throw new AuthException('INVALID_REFRESH_TOKEN');
+        }
+
+        const newRefreshToken = this.generateRefreshToken(refreshToken.userId);
+        const newAccessToken = this.generateAccessToken(refreshToken.userId);
+
+        await this.revokeToken(refreshToken);
+
+        return {
+            accessToken: newAccessToken,
+            refreshToken: newRefreshToken,
+        };
     }
 
     private generateAccessToken(userId: string) {
-        return Jwt.generateAccessToken({userId})
+        return Jwt.generateAccessToken({ userId });
+    }
+
+    private async revokeToken(token: RefreshToken) {
+        token.revokedAt = new Date();
+        await token.save();
     }
 
     private async generateRefreshToken(userId: string) {
-        const refreshToken = Jwt.generateRefreshToken({userId});
+        const refreshToken = Jwt.generateRefreshToken({ userId });
         const expiresAt = dayjs().add(7, 'days').toDate();
-        await this.refreshTokensRepository.create({token: refreshToken, userId, expiresAt, revoked: false})
+        await this.refreshTokensRepository.create({ token: refreshToken, userId, expiresAt });
+        return refreshToken;
     }
 }

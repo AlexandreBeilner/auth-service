@@ -15,7 +15,7 @@ export class RefreshToken extends Model<
     @Attribute(DataTypes.UUID)
     @PrimaryKey
     @Default(() => uuidv4())
-    declare id: CreationOptional<number>;
+    declare id: CreationOptional<string>;
 
     @Attribute(DataTypes.UUID)
     declare userId: string;
@@ -26,7 +26,6 @@ export class RefreshToken extends Model<
     @Attribute(DataTypes.DATE)
     declare expiresAt: Date;
 
-    @Default(false)
-    @Attribute(DataTypes.BOOLEAN)
-    declare revoked: boolean;
+    @Attribute(DataTypes.DATE)
+    declare revokedAt?: Date;
 }

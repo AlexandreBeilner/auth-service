@@ -23,7 +23,7 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
     @Attribute(DataTypes.UUID)
     @PrimaryKey
     @Default(() => uuidv4())
-    declare id: CreationOptional<number>;
+    declare id: CreationOptional<string>;
 
     @Attribute(DataTypes.STRING)
     @NotNull

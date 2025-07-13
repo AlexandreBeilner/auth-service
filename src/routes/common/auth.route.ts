@@ -10,7 +10,6 @@ export class AuthRoute extends AbstractRoute {
             DataValidatorMiddleware.validateBody(AuthValidator.register()),
             AuthController.register
         );
-
         return this.router;
     }
 }

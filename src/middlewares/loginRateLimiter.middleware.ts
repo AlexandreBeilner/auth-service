@@ -1,5 +1,5 @@
-import {NextFunction,Request, Response} from "express";
-import {redis} from "../config/redis";
+import { NextFunction, Request, Response } from 'express';
+import { redis } from '../config/redis';
 
 const MAX_ATTEMPTS = 5;
 

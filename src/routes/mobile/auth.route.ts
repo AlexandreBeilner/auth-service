@@ -2,7 +2,7 @@ import { AbstractRoute } from '../common/abstract.route';
 import AuthController from '../../controllers/auth/mobile/auth.controller';
 import { AuthValidator } from '../../validators/auth.validator';
 import { DataValidatorMiddleware } from '../../middlewares/dataValidator.middleware';
-import {LoginRateLimiterMiddleware} from "../../middlewares/loginRateLimiter.middleware";
+import { LoginRateLimiterMiddleware } from '../../middlewares/loginRateLimiter.middleware';
 
 export class AuthRoute extends AbstractRoute {
     init() {

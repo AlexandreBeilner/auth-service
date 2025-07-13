@@ -15,7 +15,8 @@ services:
     environment:
       REDIS_PASSWORD: ${REDIS_PASSWORD}
     ports:
-      - "5540:5540"
+      - "6379:6379"
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD}"]
 
 volumes:
   data:

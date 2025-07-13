@@ -1,16 +1,16 @@
-import {InferCreationAttributes} from "@sequelize/core";
-import {RefreshToken} from "../models/RefreshToken";
+import { InferCreationAttributes } from '@sequelize/core';
+import { RefreshToken } from '../models/RefreshToken';
 
-type CreateRefreshToken = InferCreationAttributes<RefreshToken>;
+type RefreshTokenData = InferCreationAttributes<RefreshToken>;
 
 export class RefreshTokensRepository {
-    async create(data: Omit<CreateRefreshToken, 'id'>) {
-        return await RefreshToken.create(data)
+    async create(data: Omit<RefreshTokenData, 'id'>) {
+        return await RefreshToken.create(data);
     }
 
     async getByToken(token: string) {
-        return RefreshToken.findOne({
-            where: {token: token}
-        })
+        return await RefreshToken.findOne({
+            where: { token: token },
+        });
     }
 }

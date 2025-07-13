@@ -2,11 +2,12 @@ import { Request, Response } from 'express';
 import { AuthService } from '../../../services/auth.service';
 import { ErrorHandler } from '../../../utils/errorHandler';
 import { UsersRepository } from '../../../repositories/users.repository';
+import { RefreshTokensRepository } from '../../../repositories/refreshTokens.repository';
 
 class AuthController {
     private readonly authService: AuthService;
     constructor() {
-        this.authService = new AuthService(new UsersRepository());
+        this.authService = new AuthService(new UsersRepository(), new RefreshTokensRepository());
     }
 
     register = async (req: Request, res: Response) => {

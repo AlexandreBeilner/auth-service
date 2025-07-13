@@ -13,16 +13,16 @@ interface Config {
         port: string;
     };
     redis: {
-        host: string,
+        host: string;
         port: string;
-        password: string
-    },
+        password: string;
+    };
     jwt: {
-        access: string,
-        refresh: string,
-        accessExpiresIn: number,
-        refreshExpiresIn: number,
-    }
+        access: string;
+        refresh: string;
+        accessExpiresIn: number;
+        refreshExpiresIn: number;
+    };
 }
 
 const config: Config = {
@@ -37,15 +37,15 @@ const config: Config = {
     },
     redis: {
         host: process.env.REDIS_HOST as string,
-        port: process.env.REDIS_PASSWORD as string,
-        password:process.env.REDIS_PORT as string
+        port: process.env.REDIS_PORT as string,
+        password: process.env.REDIS_PASSWORD as string,
     },
     jwt: {
         access: process.env.ACCESS_TOKEN_SECRET as string,
         refresh: process.env.REFRESH_TOKEN_SECRET as string,
         accessExpiresIn: 60 * 15, // 15 minutes,
-        refreshExpiresIn: 60 * 60 * 24 * 7 // 7 days,
-    }
+        refreshExpiresIn: 60 * 60 * 24 * 7, // 7 days,
+    },
 };
 
 export { config };
