@@ -28,5 +28,5 @@ export class RefreshToken extends Model<
 
     @Default(false)
     @Attribute(DataTypes.BOOLEAN)
-    declare revoked: string;
+    declare revoked: boolean;
 }

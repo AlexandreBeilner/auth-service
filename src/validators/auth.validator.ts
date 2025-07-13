@@ -10,4 +10,11 @@ export class AuthValidator {
             password: z.string().trim().regex(strongPasswordRegex),
         });
     }
+
+    static login() {
+        return z.object({
+            email: z.string().email(),
+            password: z.string(),
+        });
+    }
 }

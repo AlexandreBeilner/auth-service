@@ -1,9 +1,9 @@
-import {User} from "../models/User";
-import {InferCreationAttributes} from "@sequelize/core";
+import { User } from '../models/User';
+import { InferCreationAttributes } from '@sequelize/core';
 
 type UserCreateInput = InferCreationAttributes<User>;
 
-export class AuthRepository {
+export class UsersRepository {
     async createUser(user: Omit<UserCreateInput, 'id'>) {
         return await User.create(user);
     }
@@ -13,6 +13,6 @@ export class AuthRepository {
     }
 
     async getByEmail(email: string) {
-        return await User.findOne({where: {email}})
+        return await User.findOne({ where: { email } });
     }
 }
