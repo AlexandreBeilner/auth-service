@@ -22,6 +22,7 @@ export class AuthService {
     }
 
     async register(newUser: registerData) {
+        newUser.email = newUser.email.toLowerCase();
         const user = await this.usersRepository.getByEmail(newUser.email);
         if (user) {
             throw new AuthException('USED_EMAIL');
@@ -34,10 +35,10 @@ export class AuthService {
         });
     }
 
-    public async login(data: loginData, rateLimitKey?: string) {
-        console.log(data);
-        const user = await this.usersRepository.getByEmail(data.email);
-        const passwordIsEquals = await Hash.compare(data.password, user?.passwordHash ?? '');
+    public async login({ email, password, rateLimitKey, userAgent }: loginData) {
+        email = email.toLowerCase();
+        const user = await this.usersRepository.getByEmail(email);
+        const passwordIsEquals = await Hash.compare(password, user?.passwordHash ?? '');
         if (!user || !passwordIsEquals) {
             if (rateLimitKey) {
                 await redis.incr(rateLimitKey);
@@ -51,14 +52,14 @@ export class AuthService {
         }
 
         const accessToken = this.generateAccessToken(user.id);
-        const refreshToken = await this.generateRefreshToken(user.id);
+        const refreshToken = await this.generateRefreshToken(user.id, userAgent);
         return {
             accessToken,
             refreshToken,
         };
     }
 
-    public async refreshToken(token: string) {
+    public async refreshToken(token: string, userAgent?: string) {
         const refreshToken = await this.refreshTokensRepository.getByToken(token);
 
         if (!refreshToken || refreshToken.revokedAt) {
@@ -72,12 +73,12 @@ export class AuthService {
             throw new AuthException('INVALID_REFRESH_TOKEN');
         }
 
-        if (refreshToken.expiresAt < new Date()) {
+        if (refreshToken.expiresAt < new Date() || userAgent !== refreshToken.userAgent) {
             await this.revokeToken(refreshToken);
             throw new AuthException('INVALID_REFRESH_TOKEN');
         }
 
-        const newRefreshToken = this.generateRefreshToken(refreshToken.userId);
+        const newRefreshToken = await this.generateRefreshToken(refreshToken.userId, userAgent);
         const newAccessToken = this.generateAccessToken(refreshToken.userId);
 
         await this.revokeToken(refreshToken);
@@ -97,10 +98,15 @@ export class AuthService {
         await token.save();
     }
 
-    private async generateRefreshToken(userId: string) {
+    private async generateRefreshToken(userId: string, userAgent: string) {
         const refreshToken = Jwt.generateRefreshToken({ userId });
         const expiresAt = dayjs().add(7, 'days').toDate();
-        await this.refreshTokensRepository.create({ token: refreshToken, userId, expiresAt });
+        await this.refreshTokensRepository.create({
+            token: refreshToken,
+            userId,
+            expiresAt,
+            userAgent,
+        });
         return refreshToken;
     }
 }

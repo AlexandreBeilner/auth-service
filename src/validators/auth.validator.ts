@@ -17,4 +17,10 @@ export class AuthValidator {
             password: z.string(),
         });
     }
+
+    static activate2FA() {
+        return z.object({
+            type: z.enum(['totp', 'email_otp']),
+        });
+    }
 }

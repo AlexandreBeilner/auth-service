@@ -16,11 +16,11 @@ export class Jwt {
         });
     }
 
-    static verifyAccessToken(token: string) {
+    static verifyAccessToken = (token: string) => {
         return jwt.verify(token, config.jwt.access) as JwtPayload;
-    }
+    };
 
-    static verifyRefreshToken(token: string) {
+    static verifyRefreshToken = (token: string) => {
         return jwt.verify(token, config.jwt.refresh) as JwtPayload;
-    }
+    };
 }

@@ -28,4 +28,7 @@ export class RefreshToken extends Model<
 
     @Attribute(DataTypes.DATE)
     declare revokedAt?: Date;
+
+    @Attribute(DataTypes.TEXT)
+    declare userAgent: string;
 }

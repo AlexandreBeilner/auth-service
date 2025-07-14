@@ -2,6 +2,7 @@ import { Response } from 'express';
 import { AbstractException } from '../exceptions/abstract.exception';
 export class ErrorHandler {
     public static throw(error: any, res: Response) {
+        if (res.headersSent) return;
         if (error instanceof AbstractException) {
             res.status(error.statusCode).json({ message: error.message });
             return;

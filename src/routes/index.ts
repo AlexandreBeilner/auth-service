@@ -1,15 +1,16 @@
-import { Router } from 'express';
-import { AuthRoute as AuthRouteWeb } from './web/auth.route';
-import { AuthRoute as AuthRouteMobile } from './mobile/auth.route';
-import { AuthRoute } from './common/auth.route';
+import { NextFunction, Request, Response, Router } from 'express';
+import { AuthRoute } from './auth.route';
+import { AuthTransportDetectorMiddleware } from '../middlewares/authTransportDetector.middleware';
 
 interface RouteType {
     endpoint: string;
     router: Router;
-    middleware?: any;
+    middleware?: Array<(req: Request, res: Response, next: NextFunction) => void>;
 }
 export const ROUTES: Array<RouteType> = [
-    { endpoint: '/auth', router: new AuthRoute().init() },
-    { endpoint: '/web/auth', router: new AuthRouteWeb().init() },
-    { endpoint: '/mobile/auth', router: new AuthRouteMobile().init() },
+    {
+        endpoint: '/auth',
+        router: new AuthRoute().init(),
+        middleware: [AuthTransportDetectorMiddleware.init],
+    },
 ];

@@ -44,10 +44,13 @@ export class User extends Model<InferAttributes<User>, InferCreationAttributes<U
 
     @Default(false)
     @Attribute(DataTypes.BOOLEAN)
-    declare is2FAEnabled?: boolean;
+    declare isTwoFactorEnabled?: boolean;
 
     @Attribute(DataTypes.STRING)
-    declare twoFASecret?: string;
+    declare twoFactorSecret?: string;
+
+    @Attribute(DataTypes.ENUM('totp', 'email_otp'))
+    declare twoFactorType?: string;
 
     @HasMany(() => OAuthAccount, 'userId')
     declare users?: NonAttribute<OAuthAccount[]>;

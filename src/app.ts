@@ -32,7 +32,7 @@ export class App {
     private routes(): void {
         ROUTES.forEach((r) => {
             if (r.middleware) {
-                this.app.use(r.endpoint, r.middleware, r.router);
+                this.app.use(r.endpoint, ...r.middleware, r.router);
                 return;
             }
             this.app.use(r.endpoint, r.router);

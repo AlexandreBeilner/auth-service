@@ -1,17 +1,22 @@
 import { AbstractException } from './abstract.exception';
+import { AuthMessage } from '../messages/auth.message';
 
 export class AuthException extends AbstractException {
     private static readonly exceptions = {
         USED_EMAIL: {
-            message: 'E-mail já está em uso.',
+            message: AuthMessage.USED_EMAIL,
             statusCode: 409,
         },
         INVALID_CREDENTIAL_ARGUMENTS: {
-            message: 'E-mail ou senha estão incorretos. Verifique e tente novamente.',
+            message: AuthMessage.INVALID_CREDENTIAL_ARGUMENTS,
             statusCode: 401,
         },
         INVALID_REFRESH_TOKEN: {
-            message: 'A sessão expirou ou o token de atualização é inválido. Faça login novamente.',
+            message: AuthMessage.INVALID_REFRESH_TOKEN,
+            statusCode: 401,
+        },
+        INVALID_ACCESS_TOKEN: {
+            message: AuthMessage.INVALID_ACCESS_TOKEN,
             statusCode: 401,
         },
     };
