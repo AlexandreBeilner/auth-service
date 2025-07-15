@@ -5,6 +5,7 @@ dotenv.config();
 interface Config {
     port: number;
     nodeEnv: string;
+    serviceName: string;
     database: {
         db: string;
         user: string;
@@ -28,6 +29,7 @@ interface Config {
 const config: Config = {
     port: Number(process.env.PORT) || 3000,
     nodeEnv: process.env.NODE_ENV || 'development',
+    serviceName: process.env.SERVICE_NAME || 'XDB',
     database: {
         db: process.env.DB_NAME as string,
         user: process.env.DB_USER as string,

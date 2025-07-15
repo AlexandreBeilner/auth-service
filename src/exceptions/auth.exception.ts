@@ -19,6 +19,10 @@ export class AuthException extends AbstractException {
             message: AuthMessage.INVALID_ACCESS_TOKEN,
             statusCode: 401,
         },
+        INVALID_2FA_CODE: {
+            message: AuthMessage.INVALID_2FA_CODE,
+            statusCode: 401,
+        },
     };
     constructor(errorCode: keyof typeof AuthException.exceptions) {
         const { message, statusCode } = AuthException.exceptions[errorCode];

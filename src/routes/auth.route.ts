@@ -26,7 +26,14 @@ export class AuthRoute extends AbstractRoute {
         this.router.post(
             '/activate-2fa',
             TokenValidatorMiddleware.init('access'),
+            DataValidatorMiddleware.validateBody(AuthValidator.activate2FA()),
             AuthController.activateTwoFA
+        );
+        this.router.post(
+            '/confirm-activate-2fa',
+            TokenValidatorMiddleware.init('access'),
+            DataValidatorMiddleware.validateBody(AuthValidator.confirmActivate2FA()),
+            AuthController.confirmActivateTwoFa
         );
         // this.router.get('/me', AuthController.me);
         return this.router;
