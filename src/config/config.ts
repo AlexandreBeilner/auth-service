@@ -24,6 +24,10 @@ interface Config {
         accessExpiresIn: number;
         refreshExpiresIn: number;
     };
+    smtp: {
+        user: string;
+        pass: string;
+    };
 }
 
 const config: Config = {
@@ -47,6 +51,10 @@ const config: Config = {
         refresh: process.env.REFRESH_TOKEN_SECRET as string,
         accessExpiresIn: 60 * 15, // 15 minutes,
         refreshExpiresIn: 60 * 60 * 24 * 7, // 7 days,
+    },
+    smtp: {
+        user: process.env.SMTP_USER as string,
+        pass: process.env.SMTP_PASS as string,
     },
 };
 

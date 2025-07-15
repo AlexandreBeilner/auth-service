@@ -1,5 +1,6 @@
 import { TwoFaStrategy } from '../twoFa.strategy';
 import { User } from '../../../models/User';
+import { EmailService } from '../../../services/email.service';
 
 export class TwoFaOPTStrategy implements TwoFaStrategy {
     activate = async (user: User) => {

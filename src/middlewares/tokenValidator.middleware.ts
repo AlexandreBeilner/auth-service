@@ -25,7 +25,7 @@ export class TokenValidatorMiddleware {
         const token = req.headers.authorization ?? '';
         const [bearer, jwt] = token?.split(' ');
         if (bearer !== 'Bearer') {
-            res.send(401).json({
+            res.status(401).json({
                 message:
                     tokenType === 'refresh'
                         ? AuthMessage.INVALID_REFRESH_TOKEN
@@ -41,7 +41,7 @@ export class TokenValidatorMiddleware {
             const data = verifyFunc[tokenType](jwt);
             (req as any).userId = data.userId;
         } catch (e) {
-            res.send(401).json({
+            res.status(401).json({
                 message:
                     tokenType === 'refresh'
                         ? AuthMessage.INVALID_REFRESH_TOKEN
@@ -63,7 +63,7 @@ export class TokenValidatorMiddleware {
             tokenType === 'refresh' ? CookieKeys.REFRESH_TOKEN : CookieKeys.ACCESS_TOKEN
         );
         if (!token) {
-            res.send(401).json({
+            res.status(401).json({
                 message:
                     tokenType === 'refresh'
                         ? AuthMessage.INVALID_REFRESH_TOKEN
@@ -79,7 +79,7 @@ export class TokenValidatorMiddleware {
             const data = verifyFunc[tokenType](token);
             (req as any).userId = data.userId;
         } catch (e) {
-            res.send(401).json({
+            res.status(401).json({
                 message:
                     tokenType === 'refresh'
                         ? AuthMessage.INVALID_REFRESH_TOKEN

@@ -11,13 +11,14 @@ import { TwoFaOPTStrategy } from '../strategies/twoFa/impl/twoFaOPT.strategy';
 import { TwoFaTOPTStrategy } from '../strategies/twoFa/impl/twoFaTOPT.strategy';
 import { AuthTransportType } from '../middlewares/authTransportDetector.middleware';
 import { AuthMessage } from '../messages/auth.message';
+import { EmailService } from '../services/email.service';
 
 class AuthController {
     private readonly authService: AuthService;
     private readonly twoFaService: TwoFaService;
     constructor() {
         this.authService = new AuthService(new UsersRepository(), new RefreshTokensRepository());
-        this.twoFaService = new TwoFaService(new UsersRepository());
+        this.twoFaService = new TwoFaService(new UsersRepository(), new EmailService());
     }
 
     register = async (req: Request<any, any, registerData>, res: Response) => {

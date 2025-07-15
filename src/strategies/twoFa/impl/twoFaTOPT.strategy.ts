@@ -5,6 +5,7 @@ import { config } from '../../../config/config';
 import { User } from '../../../models/User';
 import { UserException } from '../../../exceptions/user.exception';
 import { AuthException } from '../../../exceptions/auth.exception';
+import { EmailService } from '../../../services/email.service';
 
 export class TwoFaTOPTStrategy implements TwoFaStrategy {
     activate = async (user: User) => {
